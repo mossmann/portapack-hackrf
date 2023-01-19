@@ -34,13 +34,12 @@ namespace path {
 
 namespace {
 
-using GPIOs = std::array<GPIO, 13>;
+using GPIOs = std::array<GPIO, 12>;
 
 /* TODO: ARM GCC 4.8 2014q3 doesn't like this array inside struct Config.
  * No idea why.
  */
 constexpr GPIOs gpios {
-	gpio_tx,
 	gpio_rx,
 	gpio_mix_bypass,
 	gpio_not_mix_bypass,
@@ -60,7 +59,6 @@ struct Config {
 
 	union {
 		struct {
-			bool tx				: 1;
 			bool rx				: 1;
 			bool mix_bypass		: 1;
 			bool not_mix_bypass	: 1;
@@ -82,7 +80,6 @@ struct Config {
 		const Band band,
 		const bool amplify
 	) :
-		tx(direction == Direction::Transmit),
 		rx(direction == Direction::Receive),
 		mix_bypass(band == Band::Mid),
 		not_mix_bypass(band != Band::Mid),

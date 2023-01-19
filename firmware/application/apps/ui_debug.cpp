@@ -325,12 +325,12 @@ DebugPeripheralsMenuView::DebugPeripheralsMenuView(NavigationView& nav) {
 			"RFFC5072", RegistersWidgetConfig { 31, 16 },
 			[](const size_t register_number) { return radio::debug::first_if::register_read(register_number); }
 		); } },
-		{ "MAX2837",     [&nav](){ nav.push<RegistersView>(
-			"MAX2837", RegistersWidgetConfig { 32, 10 },
+		{ "MAX2839",     [&nav](){ nav.push<RegistersView>(
+			"MAX2839", RegistersWidgetConfig { 32, 10 },
 			[](const size_t register_number) { return radio::debug::second_if::register_read(register_number); }
 		); } },
-		{ "Si5351C",     [&nav](){ nav.push<RegistersView>(
-			"Si5351C", RegistersWidgetConfig { 96, 8 },
+		{ "Si5351",     [&nav](){ nav.push<RegistersView>(
+			"Si5351", RegistersWidgetConfig { 96, 8 },
 			[](const size_t register_number) { return portapack::clock_generator.read_register(register_number); }
 		); } },
 		{ audio::debug::codec_name(), [&nav](){ nav.push<RegistersView>(

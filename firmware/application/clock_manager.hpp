@@ -65,11 +65,8 @@ public:
 	void enable_codec_clocks();
 	void disable_codec_clocks();
 
-	void enable_first_if_clock();
-	void disable_first_if_clock();
-
-	void enable_second_if_clock();
-	void disable_second_if_clock();
+	void enable_if_clocks();
+	void disable_if_clocks();
 
 	void set_sampling_frequency(const uint32_t frequency);
 

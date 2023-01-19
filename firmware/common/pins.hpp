@@ -44,8 +44,8 @@ constexpr Pin pins[] = {
 	[P0_0]  = {  0,  0, PinConfig::sgpio_inout_fast(3) }, /* SGPIO0/P75/BANK2F3M3: CPLD.89/HOST_DATA0(IO) */
 	[P0_1]  = {  0,  1, PinConfig::sgpio_inout_fast(3) }, /* SGPIO1/BANK2F3M5: CPLD.79/HOST_DATA1(IO) */
 	[P1_0]  = {  1,  0, PinConfig::sgpio_inout_fast(6) }, /* SGPIO7/P76/BANK2F3M7: CPLD.77/HOST_DATA7(IO) */
-	[P1_1]  = {  1,  1, { .mode=0, .pd=0, .pu=0, .fast=0, .input=0, .ifilt=1 } }, /* P1_1/P74: 10K PU, BOOT0 */
-	[P1_2]  = {  1,  2, { .mode=0, .pd=0, .pu=0, .fast=0, .input=0, .ifilt=1 } }, /* P1_2/P73: 10K PD, BOOT1 */
+	[P1_1]  = {  1,  1, { .mode=0, .pd=0, .pu=0, .fast=0, .input=0, .ifilt=1 } }, /* MCU_CLK_EN/BOOT0: 10K PU, U28.1A(I) */
+	[P1_2]  = {  1,  2, { .mode=0, .pd=0, .pu=0, .fast=0, .input=0, .ifilt=1 } }, /* CLKOUT_EN/BOOT1: 10K PD, U28.2A(I) */
 	[P1_3]  = {  1,  3, { .mode=5, .pd=0, .pu=0, .fast=0, .input=1, .ifilt=1 } }, /* SSP1_MISO/P41: MAX2837.DOUT(O) */
 	[P1_4]  = {  1,  4, { .mode=5, .pd=1, .pu=0, .fast=0, .input=0, .ifilt=1 } }, /* SSP1_MOSI/P40: MAX2837.DIN(I), MAX5864.DIN(I) */
 	[P1_5]  = {  1,  5, { .mode=0, .pd=0, .pu=1, .fast=0, .input=1, .ifilt=1 } }, /* SD_POW: PortaPack CPLD.TDO(O) */
@@ -69,9 +69,9 @@ constexpr Pin pins[] = {
 	[P2_2]  = {  2,  2, PinConfig::sgpio_inout_fast(0) }, /* SGPIO6/BANK2F3M16: CPLD.61/HOST_DATA6(IO) */
 	[P2_3]  = {  2,  3, { .mode=4, .pd=0, .pu=0, .fast=0, .input=1, .ifilt=1 } }, /* I2C1_SDA: PortaPack P2_3/LCD_TE */
 	[P2_4]  = {  2,  4, { .mode=4, .pd=0, .pu=0, .fast=0, .input=1, .ifilt=1 } }, /* I2C1_SCL: PortaPack P2_4/LCD_RDX */
-	[P2_5]  = {  2,  5, { .mode=4, .pd=0, .pu=1, .fast=0, .input=0, .ifilt=1 } }, /* RX/P43: U7.VCTL1(I), U10.VCTL1(I), U2.VCTL1(I) */
+	[P2_5]  = {  2,  5, { .mode=4, .pd=1, .pu=0, .fast=0, .input=0, .ifilt=1 } }, /* BANK2F3M2: CPLD.90/HOST_SYNC_EN(I)*/
 	[P2_6]  = {  2,  6, { .mode=4, .pd=0, .pu=0, .fast=0, .input=0, .ifilt=1 } }, /* MIXER_SCLK/P31: 33pF, RFFC5072.SCLK(I) */
-	[P2_7]  = {  2,  7, { .mode=0, .pd=0, .pu=0, .fast=0, .input=0, .ifilt=1 } }, /* ISP: 10K PU, Unused */
+	[P2_7]  = {  2,  7, { .mode=0, .pd=0, .pu=0, .fast=0, .input=0, .ifilt=1 } }, /* RX/ISP/P96: U7.VCTL(I), U10.VCTL(I), U2.VCTL(I) */
 	[P2_8]  = {  2,  8, { .mode=4, .pd=0, .pu=0, .fast=0, .input=0, .ifilt=1 } }, /* P2_8: 10K PD, BOOT2, DFU switch, PortaPack P2_8/<unused> */
 	[P2_9]  = {  2,  9, { .mode=0, .pd=0, .pu=0, .fast=0, .input=1, .ifilt=1 } }, /* P2_9: 10K PD, BOOT3, PortaPack P2_9/LCD_WRX */
 	[P2_10] = {  2, 10, { .mode=0, .pd=0, .pu=0, .fast=0, .input=0, .ifilt=1 } }, /* AMP_BYPASS/P50: U14.V2(I), U12.V2(I) */
@@ -85,14 +85,14 @@ constexpr Pin pins[] = {
 	[P4_1]  = {  4,  1, PinConfig::gpio_led(0) }, /* LED1: LED1.A(I) */
 	[P4_2]  = {  4,  2, PinConfig::gpio_led(0) }, /* LED2: LED2.A(I) */
 	[P4_3]  = {  4,  3, PinConfig::sgpio_in_fast(7) }, /* SGPIO9/P77/BANK2F3M1: CPLD.91/HOST_CAPTURE(O) */
-	[P4_4]  = {  4,  4, { .mode=0, .pd=0, .pu=0, .fast=0, .input=0, .ifilt=1 } }, /* TXENABLE/P55: MAX2837.TXENABLE(I) */
+	[P4_4]  = {  4,  4, { .mode=0, .pd=0, .pu=0, .fast=0, .input=0, .ifilt=1 } }, /* !ANT_BIAS: 10K PU, Q4.G(I) */
 	[P4_5]  = {  4,  5, { .mode=0, .pd=0, .pu=0, .fast=0, .input=0, .ifilt=1 } }, /* RXENABLE/P56: MAX2837.RXENABLE(I) */
 	[P4_6]  = {  4,  6, { .mode=0, .pd=0, .pu=0, .fast=0, .input=0, .ifilt=1 } }, /* XCVR_EN: 10K PD, MAX2837.ENABLE(I) */
 	[P4_7]  = {  4,  7, { .mode=1, .pd=0, .pu=0, .fast=0, .input=1, .ifilt=0 } }, /* GP_CLKIN/P72/MCU_CLK: SI5351C.CLK7(O) */
-	[P4_8]  = {  4,  8, PinConfig::floating_input_with_pull(0, 4) }, /* SGPIO13/BANK2F3M2: CPLD.90/HOST_SYNC_EN(I) */
+	[P4_8]  = {  4,  8, { .mode=1, .pd=1, .pu=0, .fast=0, .input=1, .ifilt=0 } }, /* CLKIN_DETECT: U26.2Y(O) */
 	[P4_9]  = {  4,  9, PinConfig::floating_input(4) }, /* SGPIO14/BANK2F3M4: CPLD.81(I) */
 	[P4_10] = {  4, 10, PinConfig::floating_input(4) }, /* SGPIO15/BANK2F3M6: CPLD.78(I) */
-	[P5_0]  = {  5,  0, { .mode=0, .pd=0, .pu=0, .fast=0, .input=0, .ifilt=1 } }, /* !VAA_ENABLE: 10K PU, Q3.G(I), power to VAA */
+	[P5_0]  = {  5,  0, { .mode=0, .pd=0, .pu=0, .fast=0, .input=0, .ifilt=1 } }, /* EN1V8: 10K PD, TPS62410.EN2(I), 1V8LED.A(I) */
 	[P5_1]  = {  5,  1, { .mode=0, .pd=0, .pu=0, .fast=0, .input=0, .ifilt=1 } }, /* LP/P45: U6.VCTL2(I), U5.VCTL1(I) */
 	[P5_2]  = {  5,  2, { .mode=0, .pd=0, .pu=0, .fast=0, .input=0, .ifilt=1 } }, /* TX_MIX_BP/P46: U9.V1(I) */
 	[P5_3]  = {  5,  3, { .mode=0, .pd=0, .pu=0, .fast=0, .input=0, .ifilt=1 } }, /* RX_MIX_BP/P47: U9.V3(I) */
@@ -107,10 +107,10 @@ constexpr Pin pins[] = {
 	[P6_4]  = {  6,  4, { .mode=0, .pd=0, .pu=0, .fast=0, .input=1, .ifilt=1 } }, /* MIXER_SDATA/P27: 33pF, RFFC5072.SDATA(IO) */
 	[P6_5]  = {  6,  5, { .mode=0, .pd=0, .pu=0, .fast=0, .input=0, .ifilt=1 } }, /* CPLD_TMS: CPLD.TMS(I) */
 	[P6_6]  = {  6,  6, PinConfig::sgpio_inout_fast(2) }, /* SGPIO5/BANK2F3M15: CPLD.64/HOST_DATA5(IO) */
-	[P6_7]  = {  6,  7, { .mode=4, .pd=0, .pu=0, .fast=0, .input=0, .ifilt=1 } }, /* TX/P42: U7.VCTL2(I), U10.VCTL2(I), U2.VCTL2(I) */
+	[P6_7]  = {  6,  7, { .mode=4, .pd=0, .pu=0, .fast=0, .input=0, .ifilt=1 } }, /* CLKIN_EN: U16.SEL(I), U26.1A(I) */
 	[P6_8]  = {  6,  8, { .mode=4, .pd=0, .pu=0, .fast=0, .input=0, .ifilt=1 } }, /* MIX_BYPASS/P34: U1.VCTL2(I), U11.VCTL1(I) */
 	[P6_9]  = {  6,  9, { .mode=0, .pd=0, .pu=0, .fast=0, .input=0, .ifilt=1 } }, /* !TX_AMP_PWR/P51: 10K PU, Q2.G(I), power to U25 (TX amp) */
-	[P6_10] = {  6, 10, { .mode=0, .pd=0, .pu=0, .fast=0, .input=0, .ifilt=1 } }, /* EN1V8/P70: 10K PD, TPS62410.EN2(I), 1V8LED.A(I) */
+	[P6_10] = {  6, 10, { .mode=0, .pd=0, .pu=0, .fast=0, .input=0, .ifilt=1 } }, /* !VAA_ENABLE: 10K PU, Q3.G(I), power to VAA */
 	[P6_11] = {  6, 11, { .mode=0, .pd=0, .pu=0, .fast=0, .input=0, .ifilt=1 } }, /* VREGMODE/P69: TPS62410.MODE/DATA(I) */
 	[P6_12] = {  6, 12, PinConfig::gpio_led(0) }, /* LED3: LED3.A(I) */
 	[P7_0]  = {  7,  0, PinConfig::gpio_inout_with_pulldown(0) }, /* GPIO3_8: PortaPack GPIO3_8(IO) */

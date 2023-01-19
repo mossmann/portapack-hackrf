@@ -56,9 +56,9 @@ const PALConfig pal_default_config = {
             | (0 << 12) // P1_17: SGPIO11, HOST_DIRECTION
             | (1 << 11) // P1_4:  SSP1_MOSI
             | (1 << 10) // P1_3:  SSP1_MISO
-            | (0 <<  9) // P1_2:  10K PD, BOOT1
-            | (1 <<  8) // P1_1:  10K PU, BOOT0
-            | (1 <<  7) // P2_7:  10K PU, ISP
+            | (0 <<  9) // P1_2:  10K PD, BOOT1, CLKOUT_EN
+            | (1 <<  8) // P1_1:  10K PU, BOOT0, MCU_CLK_EN
+            | (1 <<  7) // P2_7:  10K PU, ISP, RX
             | (0 <<  6) // P3_6:  SPIFI_MISO
             | (1 <<  5) // P6_6:  SGPIO5, HOST_DATA5
             | (1 <<  4) // P1_0:  SGPIO7, HOST_DATA7
@@ -74,9 +74,9 @@ const PALConfig pal_default_config = {
             | (0 << 12) // P1_17: SGPIO11, HOST_DIRECTION
             | (0 << 11) // P1_4:  SSP1_MOSI
             | (0 << 10) // P1_3:  SSP1_MISO
-            | (0 <<  9) // P1_2:  10K PD, BOOT1
-            | (0 <<  8) // P1_1:  10K PU, BOOT0
-            | (0 <<  7) // P2_7:  10K PU, ISP
+            | (0 <<  9) // P1_2:  10K PD, BOOT1, CLKOUT_EN
+            | (0 <<  8) // P1_1:  10K PU, BOOT0, MCU_CLK_EN
+            | (0 <<  7) // P2_7:  10K PU, ISP, RX
             | (0 <<  6) // P3_6:  SPIFI_MISO
             | (0 <<  5) // P6_6:  SGPIO5, HOST_DATA5
             | (0 <<  4) // P1_0:  SGPIO7, HOST_DATA7
@@ -130,12 +130,12 @@ const PALConfig pal_default_config = {
             | (1 << 12) // P5_3:  RX_MIX_BP
             | (0 << 11) // P5_2:  TX_MIX_BP
             | (0 << 10) // P5_1:  LP
-            | (1 <<  9) // P5_0:  !VAA_ENABLE
+            | (1 <<  9) // P5_0:  EN1V8, 10K PD
             | (0 <<  8) // P6_12: LED3 (TX)
             | (1 <<  7) // P5_7:  CS_AD
             | (0 <<  6) // P4_6:  XCVR_EN, 10K PD
             | (0 <<  5) // P4_5:  RXENABLE
-            | (0 <<  4) // P4_4:  TXENABLE
+            | (1 <<  4) // P4_4:  !ANT_BIAS
             | (1 <<  3) // P4_3:  SGPIO9, HOST_CAPTURE
             | (0 <<  2) // P4_2:  LED2 (RX)
             | (0 <<  1) // P4_1:  LED1 (USB)
@@ -148,12 +148,12 @@ const PALConfig pal_default_config = {
             | (1 << 12) // P5_3:  RX_MIX_BP
             | (1 << 11) // P5_2:  TX_MIX_BP
             | (1 << 10) // P5_1:  LP
-            | (1 <<  9) // P5_0:  !VAA_ENABLE
+            | (1 <<  9) // P5_0:  EN1V8, 10K PD
             | (1 <<  8) // P6_12: LED3 (TX)
             | (1 <<  7) // P5_7:  CS_AD
             | (1 <<  6) // P4_6:  XCVR_EN, 10K PD
             | (1 <<  5) // P4_5:  RXENABLE
-            | (1 <<  4) // P4_4:  TXENABLE
+            | (1 <<  4) // P4_4:  !ANT_BIAS
             | (0 <<  3) // P4_3:  SGPIO9, HOST_CAPTURE
             | (1 <<  2) // P4_2:  LED2 (RX)
             | (1 <<  1) // P4_1:  LED1 (USB)
@@ -170,7 +170,7 @@ const PALConfig pal_default_config = {
             | (1 <<  9) // P7_1:  PortaPack GPIO3_9(IO)
             | (1 <<  8) // P7_0:  PortaPack GPIO3_8(IO)
             | (1 <<  7) // P6_11: VREGMODE
-            | (0 <<  6) // P6_10: EN1V8, 10K PD
+            | (1 <<  6) // P6_10: !VAA_ENABLE
             | (1 <<  5) // P6_9:  !TX_AMP_PWR, 10K PU
             | (1 <<  4) // P6_5:  HackRF CPLD.TMS(I) (output only when needed, pull-up internal to CPLD when 1V8 present)
             | (1 <<  3) // P6_4:  MIXER_SDATA
@@ -188,7 +188,7 @@ const PALConfig pal_default_config = {
             | (0 <<  9) // P7_1:  PortaPack GPIO3_9(IO)
             | (0 <<  8) // P7_0:  PortaPack GPIO3_8(IO)
             | (1 <<  7) // P6_11: VREGMODE
-            | (1 <<  6) // P6_10: EN1V8, 10K PD
+            | (1 <<  6) // P6_10: !VAA_ENABLE
             | (1 <<  5) // P6_9:  !TX_AMP_PWR, 10K PU
             | (0 <<  4) // P6_5:  HackRF CPLD.TMS(I) (output only when needed, pull-up internal to CPLD when 1V8 present)
             | (0 <<  3) // P6_4:  MIXER_SDATA
@@ -207,17 +207,17 @@ const PALConfig pal_default_config = {
         .data
             = (1 << 18) // P9:5:  HackRF CPLD.TDO(O) (input with pull up)
             | (1 << 16) // P6_8:  MIX_BYPASS
-            | (0 << 15) // P6_7:  TX
+            | (0 << 15) // P6_7:  CLKIN_EN
             | (1 << 14) // P4_10: SGPIO15, CPLD (unused)
             | (1 << 13) // P4_9:  SGPIO14, CPLD (unused)
-            | (0 << 12) // P4_8:  SGPIO13, HOST_SYNC_EN
+            | (0 << 12) // P4_8:  CLKIN_DETECT
             | (1 << 11) // P3_8:  SPIFI_CS
             | (1 << 10) // P3_7:  SPIFI_MOSI
             | (1 <<  9) // P3_2:  I2S0_RX_SDA
             | (1 <<  8) // P3_1:  I2S0_RX_WS
             | (0 <<  7) // P2_8:  BOOT2
             | (0 <<  6) // P2_6:  MIXER_SCLK
-            | (1 <<  5) // P2_5:  RX
+            | (0 <<  5) // P2_5:  HOST_SYNC_EN
             | (1 <<  4) // P2_4:  PortaPack LCD_RDX
             | (0 <<  3) // P2_3:  PortaPack LCD_TE
             | (1 <<  2) // P2_2:  SGPIO6, HOST_DATA6
@@ -227,17 +227,17 @@ const PALConfig pal_default_config = {
         .dir
             = (0 << 18) // P9_5:  HackRF CPLD.TDO(O) (input with pull up)
             | (1 << 16) // P6_8:  MIX_BYPASS
-            | (1 << 15) // P6_7:  TX
+            | (1 << 15) // P6_7:  CLKIN_EN
             | (0 << 14) // P4_10: SGPIO15, CPLD (unused)
             | (0 << 13) // P4_9:  SGPIO14, CPLD (unused)
-            | (0 << 12) // P4_8:  SGPIO13, HOST_SYNC_EN
+            | (0 << 12) // P4_8:  CLKIN_DETECT
             | (0 << 11) // P3_8:  SPIFI_CS
             | (0 << 10) // P3_7:  SPIFI_MOSI
             | (0 <<  9) // P3_2:  I2S0_RX_SDA
             | (0 <<  8) // P3_1:  I2S0_RX_WS
             | (0 <<  7) // P2_8:  BOOT2
             | (0 <<  6) // P2_6:  MIXER_SCLK
-            | (1 <<  5) // P2_5:  RX
+            | (0 <<  5) // P2_5:  HOST_SYNC_EN
             | (0 <<  4) // P2_4:  PortaPack LCD_RDX
             | (0 <<  3) // P2_3:  PortaPack LCD_TE
             | (0 <<  2) // P2_2:  SGPIO6, HOST_DATA6
@@ -265,8 +265,8 @@ const PALConfig pal_default_config = {
     {  6, 12, scu_config_normal_drive_t { .mode=0, .epd=0, .epun=1, .ehs=0, .ezi=0, .zif=0 } }, /* LED3: LED3.A(I) */
 
     /* Power control */
-    {  5,  0, scu_config_normal_drive_t { .mode=0, .epd=0, .epun=1, .ehs=0, .ezi=0, .zif=0 } }, /* !VAA_ENABLE: 10K PU, Q3.G(I), power to VAA */
-    {  6, 10, scu_config_normal_drive_t { .mode=0, .epd=0, .epun=1, .ehs=0, .ezi=0, .zif=0 } }, /* EN1V8/P70: 10K PD, TPS62410.EN2(I), 1V8LED.A(I) */
+    {  6, 10, scu_config_normal_drive_t { .mode=0, .epd=0, .epun=1, .ehs=0, .ezi=0, .zif=0 } }, /* !VAA_ENABLE: 10K PU, Q3.G(I), power to VAA */
+    {  5,  0, scu_config_normal_drive_t { .mode=0, .epd=0, .epun=1, .ehs=0, .ezi=0, .zif=0 } }, /* EN1V8: 10K PD, TPS62410.EN2(I), 1V8LED.A(I) */
     {  6, 11, scu_config_normal_drive_t { .mode=0, .epd=0, .epun=1, .ehs=0, .ezi=0, .zif=0 } }, /* VREGMODE/P69: TPS62410.MODE/DATA(I) */
 
     /* HackRF: I2C0 */
@@ -297,13 +297,13 @@ const PALConfig pal_default_config = {
     {  1,  7, scu_config_normal_drive_t { .mode=0, .epd=0, .epun=1, .ehs=0, .ezi=0, .zif=0 } }, /* !MIX_BYPASS/P35: U1.VCTL1(I), U11.VCTL2(I), U9.V2(I) */
     {  1, 19, scu_config_normal_drive_t { .mode=1, .epd=0, .epun=0, .ehs=0, .ezi=0, .zif=0 } }, /* SSP1_SCK/P39: MAX2837.SCLK(I), MAX5864.SCLK(I) */
     {  1, 20, scu_config_normal_drive_t { .mode=0, .epd=0, .epun=1, .ehs=0, .ezi=0, .zif=0 } }, /* CS_XCVR/P53: MAX2837.CS(I) */
-    {  2,  5, scu_config_normal_drive_t { .mode=4, .epd=0, .epun=1, .ehs=0, .ezi=0, .zif=0 } }, /* RX/P43: U7.VCTL1(I), U10.VCTL1(I), U2.VCTL1(I) */
     {  2,  6, scu_config_normal_drive_t { .mode=4, .epd=0, .epun=1, .ehs=0, .ezi=0, .zif=0 } }, /* MIXER_SCLK/P31: 33pF, RFFC5072.SCLK(I) */
+    {  2,  7, scu_config_normal_drive_t { .mode=0, .epd=0, .epun=1, .ehs=0, .ezi=0, .zif=0 } }, /* RX/ISP/P96: U7.VCTL(I), U10.VCTL(I), U2.VCTL(I) */
     {  2, 10, scu_config_normal_drive_t { .mode=0, .epd=0, .epun=1, .ehs=0, .ezi=0, .zif=0 } }, /* AMP_BYPASS/P50: U14.V2(I), U12.V2(I) */
     {  2, 11, scu_config_normal_drive_t { .mode=0, .epd=0, .epun=1, .ehs=0, .ezi=0, .zif=0 } }, /* RX_AMP/P49: U12.V1(I), U14.V3(I) */
     {  2, 12, scu_config_normal_drive_t { .mode=0, .epd=0, .epun=1, .ehs=0, .ezi=0, .zif=0 } }, /* !RX_AMP_PWR/P52: 10K PU, Q1.G(I), power to U13 (RX amp) */
     {  4,  0, scu_config_normal_drive_t { .mode=0, .epd=0, .epun=1, .ehs=0, .ezi=0, .zif=0 } }, /* HP/P44: U6.VCTL1(I), U5.VCTL2(I) */
-    {  4,  4, scu_config_normal_drive_t { .mode=0, .epd=0, .epun=1, .ehs=0, .ezi=0, .zif=0 } }, /* TXENABLE/P55: MAX2837.TXENABLE(I) */
+    {  4,  4, scu_config_normal_drive_t { .mode=0, .epd=0, .epun=1, .ehs=0, .ezi=0, .zif=0 } }, /* !ANT_BIAS: 10K PU, Q4.G(I) */
     {  4,  5, scu_config_normal_drive_t { .mode=0, .epd=0, .epun=1, .ehs=0, .ezi=0, .zif=0 } }, /* RXENABLE/P56: MAX2837.RXENABLE(I) */
     {  4,  6, scu_config_normal_drive_t { .mode=0, .epd=0, .epun=1, .ehs=0, .ezi=0, .zif=0 } }, /* XCVR_EN: 10K PD, MAX2837.ENABLE(I) */
     {  5,  1, scu_config_normal_drive_t { .mode=0, .epd=0, .epun=1, .ehs=0, .ezi=0, .zif=0 } }, /* LP/P45: U6.VCTL2(I), U5.VCTL1(I) */
@@ -314,7 +314,6 @@ const PALConfig pal_default_config = {
     {  5,  6, scu_config_normal_drive_t { .mode=0, .epd=0, .epun=1, .ehs=0, .ezi=0, .zif=0 } }, /* TX_AMP/P48: U12.V3(I), U14.V1(I) */
     {  5,  7, scu_config_normal_drive_t { .mode=0, .epd=0, .epun=1, .ehs=0, .ezi=0, .zif=0 } }, /* CS_AD/P54: MAX5864.CS(I) */
     {  6,  4, scu_config_normal_drive_t { .mode=0, .epd=0, .epun=0, .ehs=0, .ezi=1, .zif=0 } }, /* MIXER_SDATA/P27: 33pF, RFFC5072.SDATA(IO) */
-    {  6,  7, scu_config_normal_drive_t { .mode=4, .epd=0, .epun=1, .ehs=0, .ezi=0, .zif=0 } }, /* TX/P42: U7.VCTL2(I), U10.VCTL2(I), U2.VCTL2(I) */
     {  6,  8, scu_config_normal_drive_t { .mode=4, .epd=0, .epun=1, .ehs=0, .ezi=0, .zif=0 } }, /* MIX_BYPASS/P34: U1.VCTL2(I), U11.VCTL1(I) */
     {  6,  9, scu_config_normal_drive_t { .mode=0, .epd=0, .epun=1, .ehs=0, .ezi=0, .zif=0 } }, /* !TX_AMP_PWR/P51: 10K PU, Q2.G(I), power to U25 (TX amp) */
 
@@ -332,9 +331,9 @@ const PALConfig pal_default_config = {
     {  1, 14, scu_config_normal_drive_t { .mode=6, .epd=0, .epun=0, .ehs=1, .ezi=0, .zif=0 } }, /* SGPIO10/P78/BANK2F3M8: CPLD.76/HOST_DISABLE(I) */
     {  1, 17, scu_config_normal_drive_t { .mode=6, .epd=1, .epun=1, .ehs=1, .ezi=0, .zif=0 } }, /* SGPIO11/P79/BANK2F3M11: CPLD.71/HOST_DIRECTION(I) */
     {  1, 18, scu_config_normal_drive_t { .mode=0, .epd=0, .epun=1, .ehs=0, .ezi=0, .zif=0 } }, /* SGPIO12/BANK2F3M12: CPLD.70/HOST_INVERT(I) */
-    {  4,  8, scu_config_normal_drive_t { .mode=4, .epd=1, .epun=1, .ehs=0, .ezi=0, .zif=0 } }, /* SGPIO13/BANK2F3M2: CPLD.90/HOST_SYNC_EN(I) */
     {  4,  9, scu_config_normal_drive_t { .mode=4, .epd=0, .epun=0, .ehs=0, .ezi=0, .zif=0 } }, /* SGPIO14/BANK2F3M4: CPLD.81/CPLD_P81 */
     {  4, 10, scu_config_normal_drive_t { .mode=4, .epd=0, .epun=0, .ehs=0, .ezi=0, .zif=0 } }, /* SGPIO15/BANK2F3M6: CPLD.78/CPLD_P78 */
+    {  2,  5, scu_config_normal_drive_t { .mode=4, .epd=1, .epun=1, .ehs=0, .ezi=0, .zif=0 } }, /* BANK2F3M2: CPLD.90/HOST_SYNC_EN(I) */
 
     /* HackRF: CPLD */
     {  6,  1, scu_config_normal_drive_t { .mode=0, .epd=0, .epun=1, .ehs=0, .ezi=0, .zif=0 } }, /* CPLD_TCK: CPLD.TCK(I), PortaPack CPLD.TCK(I) */
@@ -346,12 +345,15 @@ const PALConfig pal_default_config = {
     {  1,  5, scu_config_normal_drive_t { .mode=0, .epd=0, .epun=0, .ehs=0, .ezi=1, .zif=0 } }, /* SD_POW: PortaPack CPLD.TDO(O) */
     {  1,  8, scu_config_normal_drive_t { .mode=0, .epd=0, .epun=0, .ehs=0, .ezi=0, .zif=0 } }, /* SD_VOLT0: PortaPack CPLD.TMS(I) */
 
+    /* Clock control */
+    {  1,  1, scu_config_normal_drive_t { .mode=0, .epd=0, .epun=1, .ehs=0, .ezi=0, .zif=0 } }, /* MCU_CLK_EN/BOOT0: 10K PU, U28.1A(I) */
+    {  1,  2, scu_config_normal_drive_t { .mode=0, .epd=0, .epun=1, .ehs=0, .ezi=0, .zif=0 } }, /* CLKOUT_EN/BOOT1: 10K PD, U28.2A(I) */
+    {  6,  7, scu_config_normal_drive_t { .mode=4, .epd=0, .epun=1, .ehs=0, .ezi=0, .zif=0 } }, /* CLKIN_EN: U16.SEL(I), U26.1A(I) */
+
     /* Miscellaneous */
-    {  1,  1, scu_config_normal_drive_t { .mode=0, .epd=0, .epun=1, .ehs=0, .ezi=0, .zif=0 } }, /* P1_1/P74: 10K PU, BOOT0 */
-    {  1,  2, scu_config_normal_drive_t { .mode=0, .epd=0, .epun=1, .ehs=0, .ezi=0, .zif=0 } }, /* P1_2/P73: 10K PD, BOOT1 */
-    {  2,  7, scu_config_normal_drive_t { .mode=0, .epd=0, .epun=1, .ehs=0, .ezi=0, .zif=0 } }, /* ISP: 10K PU, Unused */
     {  6,  0, scu_config_normal_drive_t { .mode=0, .epd=0, .epun=0, .ehs=0, .ezi=0, .zif=0 } }, /* I2S0_RX_MCLK: Unused */
     { 15,  4, scu_config_normal_drive_t { .mode=7, .epd=0, .epun=0, .ehs=0, .ezi=0, .zif=0 } }, /* I2S0_RX_SCK: Unused */
+    {  4,  8, scu_config_normal_drive_t { .mode=1, .epd=1, .epun=1, .ehs=0, .ezi=0, .zif=0 } }, /* CLKIN_DETECT: U26.2Y(O) */
   }
 };
 #endif
@@ -442,6 +444,7 @@ void configure_pins_portapack(void) {
     setup_pins(pins_setup_portapack);
 }
 
+#if 0
 static const motocon_pwm_resources_t motocon_pwm_resources = {
   .base = { .clk = &LPC_CGU->BASE_APB1_CLK, .stat = &LPC_CCU1->BASE_STAT, .stat_mask = (1 << 1) },
   .branch = { .cfg = &LPC_CCU1->CLK_APB1_MOTOCON_PWM_CFG, .stat = &LPC_CCU1->CLK_APB1_MOTOCON_PWM_STAT },
@@ -449,7 +452,8 @@ static const motocon_pwm_resources_t motocon_pwm_resources = {
 };
 
 static const scu_setup_t pin_setup_vaa_enablex_pwm  = { 5, 0, scu_config_normal_drive_t { .mode=1, .epd=0, .epun=1, .ehs=0, .ezi=0, .zif=0 } };
-static const scu_setup_t pin_setup_vaa_enablex_gpio = { 5, 0, scu_config_normal_drive_t { .mode=0, .epd=0, .epun=1, .ehs=0, .ezi=0, .zif=0 } };
+#endif
+static const scu_setup_t pin_setup_vaa_enablex_gpio = { 6, 10, scu_config_normal_drive_t { .mode=0, .epd=0, .epun=1, .ehs=0, .ezi=0, .zif=0 } };
 
 /* VAA powers:
  * MAX5864 analog section.
@@ -467,7 +471,7 @@ void vaa_power_on(void) {
    *
    * Controlling timing while running from SPIFI flash is tricky, hence use of a PWM peripheral...
    */
-
+#if 0
   /* Configure and enable MOTOCONPWM peripheral clocks.
    * Assume IDIVC is running the post-bootloader configuration, outputting 96MHz derived from PLL1.
    */
@@ -507,12 +511,24 @@ void vaa_power_on(void) {
   peripheral_reset(&motocon_pwm_resources.reset);
   branch_clock_disable(&motocon_pwm_resources.branch);
   base_clock_disable(&motocon_pwm_resources.base);
+#endif
+  /*
+   * There is enough VCC->VAA leakage prior to VAA activation from IO pins on
+   * HackRF One r9 that slowing down activation like this isn't necessary, but
+   * we do it just in case a different start-up sequence in the future results
+   * in less leakage.
+   */
+  setup_pin(pin_setup_vaa_enablex_gpio); // P6_10 GPIO3[ 6]: !VAA_ENABLE, 10K PU
+  for (uint32_t i = 0; i < 1000; i++) {
+    LPC_GPIO->W3[6] = 1;
+    LPC_GPIO->W3[6] = 0;
+  }
 }
 
 void vaa_power_off(void) {
   // TODO: There's a lot of other stuff that must be done to prevent
   // leakage from +3V3 into VAA.
-  LPC_GPIO->W2[9] = 1;
+  LPC_GPIO->W3[6] = 1;
 }
 
 /**
@@ -639,11 +655,11 @@ extern "C" void __late_init(void) {
  */
 extern "C" void boardInit(void) {
   vaa_power_on();
-  LPC_GPIO->W3[6] = 1;
+  LPC_GPIO->W2[9] = 1;
 }
 
 extern "C" void _default_exit(void) {
-    LPC_GPIO->W3[6] = 0;
+    LPC_GPIO->W2[9] = 0;
     vaa_power_off();
 
     chSysDisable();

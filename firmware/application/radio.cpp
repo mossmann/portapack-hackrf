@@ -24,7 +24,7 @@
 #include "rf_path.hpp"
 
 #include "rffc507x.hpp"
-#include "max2837.hpp"
+#include "max2839.hpp"
 #include "max5864.hpp"
 #include "baseband_cpld.hpp"
 
@@ -50,12 +50,12 @@ static constexpr uint32_t ssp_scr(
 	return static_cast<uint8_t>(pclk_f / cpsr / spi_f - 1);
 }
 
-static constexpr SPIConfig ssp_config_max2837 = {
+static constexpr SPIConfig ssp_config_max2839 = {
 	.end_cb = NULL,
-	.ssport = gpio_max2837_select.port(),
-	.sspad = gpio_max2837_select.pad(),
+	.ssport = gpio_max2839_select.port(),
+	.sspad = gpio_max2839_select.pad(),
 	.cr0 =
-		  CR0_CLOCKRATE(ssp_scr(ssp1_pclk_f, ssp1_cpsr, max2837_spi_f))
+		  CR0_CLOCKRATE(ssp_scr(ssp1_pclk_f, ssp1_cpsr, max2839_spi_f))
 		| CR0_FRFSPI
 		| CR0_DSS16BIT
 		,
@@ -76,9 +76,9 @@ static constexpr SPIConfig ssp_config_max5864 = {
 
 static spi::arbiter::Arbiter ssp1_arbiter(portapack::ssp1);
 
-static spi::arbiter::Target ssp1_target_max2837 {
+static spi::arbiter::Target ssp1_target_max2839 {
 	ssp1_arbiter,
-	ssp_config_max2837
+	ssp_config_max2839
 };
 
 static spi::arbiter::Target ssp1_target_max5864 {
@@ -88,7 +88,7 @@ static spi::arbiter::Target ssp1_target_max5864 {
 
 static rf::path::Path rf_path;
 rffc507x::RFFC507x first_if;
-max2837::MAX2837 second_if { ssp1_target_max2837 };
+max2839::MAX2839 second_if { ssp1_target_max2839 };
 static max5864::MAX5864 baseband_codec { ssp1_target_max5864 };
 static baseband::CPLD baseband_cpld;
 
@@ -97,6 +97,8 @@ static bool baseband_invert = false;
 static bool mixer_invert = false;
 
 void init() {
+	gpio_not_ant_pwr.write(1);
+	gpio_not_ant_pwr.output();
 	rf_path.init();
 	first_if.init();
 	second_if.init();
@@ -110,18 +112,16 @@ void set_direction(const rf::Direction new_direction) {
 	direction = new_direction;
 
 	/*
-	 * Analog baseband is inverted in RX but not TX. The RX inversion is
-	 * corrected by the CPLD, but future hardware or CPLD changes may
-	 * change this for either or both directions. For a given hardware+CPLD
-	 * platform, baseband inversion is set here for RX and/or TX. Spectrum
-	 * inversion resulting from the mixer is tracked separately according
-	 * to the tuning configuration. We ask the CPLD to apply a correction
-	 * for the total inversion.
+	 * HackRF One r9 inverts analog baseband only for RX. Previous hardware
+	 * revisions inverted analog baseband for neither direction because of
+	 * compensation in the CPLD. If we ever simplify the CPLD to handle RX
+	 * and TX the same way, we will need to update this baseband_invert
+	 * logic.
 	 */
-	baseband_invert = false;
+	baseband_invert = (direction == rf::Direction::Receive);
 	baseband_cpld.set_invert(mixer_invert ^ baseband_invert);
 
-	second_if.set_mode((direction == rf::Direction::Transmit) ? max2837::Mode::Transmit : max2837::Mode::Receive);
+	second_if.set_mode((direction == rf::Direction::Transmit) ? max2839::Mode::Transmit : max2839::Mode::Receive);
 	rf_path.set_direction(direction);
 
 	baseband_codec.set_mode((direction == rf::Direction::Transmit) ? max5864::Mode::Transmit : max5864::Mode::Receive);
@@ -175,13 +175,13 @@ void set_baseband_rate(const uint32_t rate) {
 
 void set_antenna_bias(const bool on) {
 	/* Pull MOSFET gate low to turn on antenna bias. */
-	first_if.set_gpo1(on ? 0 : 1);
+	gpio_not_ant_pwr.write(on ? 0 : 1);
 }
 
 void disable() {
 	set_antenna_bias(false);
 	baseband_codec.set_mode(max5864::Mode::Shutdown);
-	second_if.set_mode(max2837::Mode::Standby);
+	second_if.set_mode(max2839::Mode::Standby);
 	first_if.disable();
 	set_rf_amp(false);
 }

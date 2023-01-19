@@ -26,7 +26,7 @@ using namespace portapack;
 
 #include "string_format.hpp"
 
-#include "max2837.hpp"
+#include "max2839.hpp"
 
 namespace ui {
 
@@ -312,8 +312,8 @@ LNAGainField::LNAGainField(
 	Point parent_pos
 ) : NumberField {
 		parent_pos, 2,
-		{ max2837::lna::gain_db_range.minimum, max2837::lna::gain_db_range.maximum },
-		max2837::lna::gain_db_step,
+		{ max2839::lna::gain_db_range.minimum, max2839::lna::gain_db_range.maximum },
+		max2839::lna::gain_db_step,
 		' ',
 	}
 {
@@ -337,8 +337,8 @@ VGAGainField::VGAGainField(
 	Point parent_pos
 ) : NumberField {
 		parent_pos, 2,
-		{ max2837::vga::gain_db_range.minimum, max2837::vga::gain_db_range.maximum },
-		max2837::vga::gain_db_step,
+		{ max2839::vga::gain_db_range.minimum, max2839::vga::gain_db_range.maximum },
+		max2839::vga::gain_db_step,
 		' ',
 	}
 {
@@ -362,8 +362,8 @@ TXGainField::TXGainField(
 	Point parent_pos
 ) : NumberField {
 		parent_pos, 2,
-		{ max2837::tx::gain_db_range.minimum, max2837::tx::gain_db_range.maximum },
-		max2837::tx::gain_db_step,
+		{ max2839::tx::gain_db_range.minimum, max2839::tx::gain_db_range.maximum },
+		max2839::tx::gain_db_step,
 		' ',
 	}
 {
